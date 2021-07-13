@@ -3,13 +3,15 @@
   <v-container class='mt-16'>
     <v-layout row align-center justify-center class='' >
       <v-flex class='' height='200px'>
+        <v-form ref="form"
+    v-model="valid">
         <v-card rippled class='flexcard white lighten-3 mx-auto' elevation="3"
            rounded="xl">
           <v-row class='mx-0 my-0' style="overflow:hidden;">
               <v-col cols='7 ' class='teal lighten-2' align-self="center">
               <v-flex class='ma-15 '>
                     <h2 class='white--text text-center font-weight-bold mt-5'>
-                      Create account</h2>
+                      Sign in</h2>
                 <v-text-field prepend-inner-icon="mdi-account" outlined :rules='Rules' dark
                 class='mx-5 ' v-model='username'
                   label="Username">
@@ -20,7 +22,7 @@
                   type="password">
                 </v-text-field>
                     <v-row justify="center">
-                <v-btn depressed x-large primary @click="Register" rounded
+                <v-btn depressed x-large primary  rounded @click="login"
                 class='white mt-2 lighten-3 teal--text'>Login
                 </v-btn>
                     </v-row>
@@ -31,8 +33,9 @@
             You haven't an account yet?
           </h2>
           <v-card-text class='grey--text text--darken-2'>
-           To keep you connected with us please log in with your personal info
+            It's never too early or too late for<h3 class='teal--text'>Calendar</h3>
           </v-card-text>
+          
           <v-card-actions class="justify-center">
             <v-btn depressed x-large primary rounded to="/register"
                 class='teal lighten-3 white--text'>
@@ -42,6 +45,7 @@
             </v-col>
           </v-row>
         </v-card>
+        </v-form>
       </v-flex>
     </v-layout>
   </v-container>
@@ -49,6 +53,7 @@
 </template>
 
 <script>
+import Vue from 'vue';
 // import firebase from 'firebase/app';
 // import 'firebase/auth';
 // import 'firebase/database';
@@ -58,6 +63,7 @@
 export default {
   data() {
     return {
+      valid: true,
       username: '',
       email: '',
       password: '',
@@ -75,6 +81,23 @@ export default {
     };
   },
   methods: {
+    async login() {
+      if(this.$refs.form.validate()){
+        let formData = new FormData();
+        formData.append("username",this.username);
+        formData.append("password",this.password);
+        Vue.axios.post("/api/login",formData);
+
+        let response = await Vue.axios.post("/api/login", formData);
+        if (response.data.success){
+          this.$router.push({path:"/"})
+        }
+      }
+      // console.log(this.username, this.password);
+    },
+    // register() {
+    //   this.$router.push({path:"/register"});
+    // }
     // async Register() {
     //   console.log(this.role);
     //   if (this.username !== '' && this.email !== '' && this.password !== '') {
