@@ -24,6 +24,8 @@
               <v-flex class='ma-15 '>
                     <h2 class='white--text text-center font-weight-bold mt-5'>
                       Create account</h2>
+                      <v-form ref="form"
+    v-model="valid">
                 <v-text-field prepend-inner-icon="mdi-account" outlined :rules='Rules' dark
                 class='mx-5 ' v-model='username'
                   label="Username">
@@ -37,6 +39,7 @@
                   label="Password"
                   type="password">
                 </v-text-field>
+                      </v-form>
                     <v-row justify="center">
                 <v-btn depressed x-large primary @click="Register" rounded
                 class='white mt-2 lighten-3 teal--text'>Register
@@ -53,6 +56,7 @@
 </template>
 
 <script>
+import Vue from 'vue';
 // import firebase from 'firebase/app';
 // import 'firebase/auth';
 // import 'firebase/database';
@@ -62,6 +66,7 @@
 export default {
   data() {
     return {
+      valid:true,
       username: '',
       email: '',
       password: '',
@@ -79,6 +84,28 @@ export default {
     };
   },
   methods: {
+    async Register(){
+      console.log("you click register!");
+      if(this.$refs.form.validate()){
+        let formData = new FormData();
+        formData.append("username",this.username);
+        formData.append("password",this.password);
+        // Vue.axios.post("/api/register",formData);
+
+        await Vue.axios.post("/api/register", formData);
+        // Vue.axios.post("/api/login",formData);
+
+        let response = await Vue.axios.post("/api/login", formData);
+        if (response.data.success){
+          this.$router.push({path:"/"})
+        }
+        // console.log(response);
+        // if (response.data !== null){
+        //   console.log("to home");
+        //   this.$router.push({path:"/"})
+        // }
+      }
+    },
     // async Register() {
     //   console.log(this.role);
     //   if (this.username !== '' && this.email !== '' && this.password !== '') {
