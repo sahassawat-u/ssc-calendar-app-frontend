@@ -30,9 +30,9 @@
                 class='mx-5 ' v-model='username'
                   label="Username">
                 </v-text-field>
-                <v-text-field prepend-inner-icon="mdi-email" dark
-                class='mx-5' v-model='email' outlined :rules="emailRules"
-                  label="Email">
+                <v-text-field prepend-inner-icon="account-lock" dark
+                class='mx-5' v-model='email' outlined :rules="ConfirmedRules"
+                  label="Confirmed Username">
                 </v-text-field>
                 <v-text-field prepend-inner-icon="mdi-lock" dark
                 class='mx-5' v-model='password' outlined :rules='passwordRules'
@@ -68,6 +68,7 @@ export default {
     return {
       valid:true,
       username: '',
+      confiredUsername:'',
       email: '',
       password: '',
       role: '',
@@ -78,6 +79,9 @@ export default {
       Rules: [
         (v) => v.length >= 3 || 'Minimum length is 3 characters',
       ],
+      ConfirmedRules:[
+        (v) => this.username == v || 'Username do not match!'
+      ],
       passwordRules: [
         (v) => v.length >= 5 || 'Password must be more than 5 characters',
       ],
@@ -85,7 +89,7 @@ export default {
   },
   methods: {
     async Register(){
-      console.log("you click register!");
+      // console.log("you click register!");
       if(this.$refs.form.validate()){
         let formData = new FormData();
         formData.append("username",this.username);
@@ -96,8 +100,11 @@ export default {
         // Vue.axios.post("/api/login",formData);
 
         let response = await Vue.axios.post("/api/login", formData);
-        if (response.data.success){
+        if (response.data.success && response.data.message !== 'Bad credentials'){
           this.$router.push({path:"/"})
+        } else {
+          // console.log('hi from unsuccesfull login');
+          alert("Invalid registration!")
         }
         // console.log(response);
         // if (response.data !== null){

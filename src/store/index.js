@@ -5,10 +5,14 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
     state: {
+        events:[],
         isLoggedIn: false,
         username: null,
         name: null,
         role: "",
+    },
+    getters:{
+        EVENTS: state => state.events
     },
     mutations: {
         setIsLoggedIn(state, isLoggedIn){
@@ -22,6 +26,16 @@ export default new Vuex.Store({
         },
         setRole(state, role){
             state.role = role;
+        },
+        addEvent: (state, event) => {
+            console.log(event);
+            state.events.push(event)
+        },
+        updateEvent: (state, {id, title, start, end}) => {
+            let index = state.events.findIndex(_event => _event.id == id)
+            state.events[index].title = title;
+            state.events[index].start = start;
+            state.events[index].end = end;
         }
     },
     actions: {

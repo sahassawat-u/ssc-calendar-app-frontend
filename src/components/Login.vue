@@ -87,10 +87,15 @@ export default {
         formData.append("username",this.username);
         formData.append("password",this.password);
         Vue.axios.post("/api/login",formData);
-
+        // console.log("hi bruh");
         let response = await Vue.axios.post("/api/login", formData);
-        if (response.data.success){
+
+        if (response.data.success  && response.data.message !== 'Bad credentials'){
+          // console.log(response.data.message)
           this.$router.push({path:"/"})
+        } else {
+          // console.log('hi from unsuccesfull login');
+          alert("Invalid username or password!")
         }
       }
       // console.log(this.username, this.password);

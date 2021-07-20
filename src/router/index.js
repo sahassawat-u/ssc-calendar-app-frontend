@@ -38,9 +38,19 @@ const routes = [
   {
     path: '/',
     name: 'home',
-    component: () => import("../components/Home.vue"),
-
+    component: () => import("../components/Calendar.vue"),
+    // component: Login,
+    // meta: {
+    //   requiredAuthentication: false,
+    //   redirectWhenLoggedIn: true,
+    // },
   },
+  // {
+  //   path: '/',
+  //   name: 'home',
+  //   component: () => import("../components/Home.vue"),
+
+  // },
 ];
 
 const router = new VueRouter({
@@ -89,7 +99,7 @@ router.beforeEach( async(to,from,next)=>{
   // console.log(store.state.password);
   // console.log(store.state.role);
   // await 
-  console.log(to.name);
+  // console.log(to.name);
   
   if(to.name === "login" && isLoggedIn){
     // redirect to home page
@@ -102,6 +112,7 @@ router.beforeEach( async(to,from,next)=>{
   // }
   if(to.name !== "login" && to.name !== "register"&& !isLoggedIn){
     // redirect to login page
+    
     console.log("hi from login");
     next({name:'login'});
   } else {
